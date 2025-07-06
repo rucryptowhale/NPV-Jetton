@@ -77,9 +77,12 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 24px;
+            font-size: 26px;
             color: white;
             box-shadow: 0 4px 15px rgba(0, 136, 204, 0.4);
+            /* Центрирование текста */
+            text-align: center;
+            line-height: 60px; /* Выравнивание по вертикали */
         }
         
         .logo-text {
@@ -536,7 +539,8 @@
                 <nav>
                     <ul>
                         <li><a href="#" class="active">Главная</a></li>
-                        <li><a href="#info">Информация</a></li>
+                        <li><a href="#info">Основная информация</a></li>
+                        <li><a href="#additional">Дополнительно</a></li>
                         <li><a href="#trading">Торговля</a></li>
                         <li><a href="#analytics">Аналитика</a></li>
                         <li><a href="#vesting">Вестинг</a></li>
@@ -580,18 +584,29 @@
                     <span class="label">Минтабельный:</span>
                     <span class="value status-false">Нет (права отозваны)</span>
                 </div>
+            </div>
+        </section>
+        
+        <!-- Additional Information -->
+        <section id="additional" class="token-info">
+            <div class="info-card">
+                <h3>Дополнительная информация</h3>
+                <div class="info-item">
+                    <span class="label">Блокчейн:</span>
+                    <span class="value">TON (The Open Network)</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Стандарт:</span>
+                    <span class="value">Jetton</span>
+                </div>
                 <div class="info-item">
                     <span class="label">Дата листинга:</span>
-                    <span class="value">20.06.24 23:19</span>
+                    <span class="value">20.06.2024</span>
                 </div>
-                
-                <a href="https://tonviewer.com/EQBzKIYP_WVnYS5kDbz-3zat98htNCXQUVfmkaH7fLdcEaT3" class="contract-link" target="_blank">
-                    <i class="fas fa-external-link-alt"></i> Детали контракта на Tonviewer
-                </a>
-            </div>
-            
-            <div class="info-card">
-                <h3>Адреса</h3>
+                <div class="info-item">
+                    <span class="label">Статус:</span>
+                    <span class="value status-true">Активный</span>
+                </div>
                 <div class="info-item">
                     <span class="label">Адрес контракта:</span>
                     <span class="value">
@@ -614,26 +629,10 @@
                     <span class="label">Статус владельца:</span>
                     <span class="value status-false">Права отозваны</span>
                 </div>
-            </div>
-            
-            <div class="info-card">
-                <h3>Дополнительно</h3>
-                <div class="info-item">
-                    <span class="label">Блокчейн:</span>
-                    <span class="value">TON (The Open Network)</span>
-                </div>
-                <div class="info-item">
-                    <span class="label">Стандарт:</span>
-                    <span class="value">Jetton</span>
-                </div>
-                <div class="info-item">
-                    <span class="label">Дата создания:</span>
-                    <span class="value">2024</span>
-                </div>
-                <div class="info-item">
-                    <span class="label">Статус:</span>
-                    <span class="value status-true">Активный</span>
-                </div>
+                
+                <a href="https://tonviewer.com/EQBzKIYP_WVnYS5kDbz-3zat98htNCXQUVfmkaH7fLdcEaT3" class="contract-link" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> Детали контракта на Tonviewer
+                </a>
             </div>
         </section>
         
