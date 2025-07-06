@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NET PRESENT VALUE (NPV) - TON Blockchain Token</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --dark: #121826;
+            --darker: #0a0e17;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --warning: #ffc107;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(37, 117, 252, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(106, 17, 203, 0.05) 0%, transparent 20%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: rgba(10, 14, 23, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(106, 17, 203, 0.3);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-text h1 {
+            font-size: 24px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+        
+        .logo-text span {
+            font-size: 18px;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 15px;
+            border-radius: 30px;
+        }
+        
+        nav a:hover, nav a.active {
+            background: var(--gradient);
+            color: white;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 80px 0 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(106, 17, 203, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+        
+        .hero p {
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color: #aab8c5;
+        }
+        
+        .highlight {
+            background: var(--gradient);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+        
+        /* Token Info */
+        .token-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+        
+        .info-card {
+            background: rgba(25, 30, 44, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(106, 17, 203, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(106, 17, 203, 0.3);
+        }
+        
+        .info-card h3 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+            color: var(--secondary);
+            font-size: 1.5rem;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .info-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border: none;
+        }
+        
+        .label {
+            color: #aab8c5;
+            font-weight: 500;
+        }
+        
+        .value {
+            font-weight: 600;
+            text-align: right;
+            max-width: 60%;
+            word-break: break-all;
+        }
+        
+        .copy-btn {
+            background: rgba(106, 17, 203, 0.2);
+            color: var(--secondary);
+            border: none;
+            border-radius: 5px;
+            padding: 3px 8px;
+            cursor: pointer;
+            margin-left: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .status-true {
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .status-false {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .vesting-info {
+            background: rgba(255, 193, 7, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 3px solid var(--warning);
+        }
+        
+        /* Description */
+        .description {
+            background: rgba(25, 30, 44, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border: 1px solid rgba(106, 17, 203, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .description h3 {
+            margin-bottom: 20px;
+            color: var(--secondary);
+            font-size: 1.8rem;
+        }
+        
+        .description p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #cbd5e0;
+        }
+        
+        /* Links Section */
+        .links-section {
+            margin: 60px 0;
+        }
+        
+        .links-section h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.2rem;
+            color: var(--secondary);
+        }
+        
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .link-card {
+            background: rgba(25, 30, 44, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(106, 17, 203, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .link-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(106, 17, 203, 0.3);
+            border-color: var(--primary);
+        }
+        
+        .link-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .link-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .link-card p {
+            color: #aab8c5;
+            margin-bottom: 20px;
+            min-height: 60px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--gradient);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(106, 17, 203, 0.6);
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(10, 14, 23, 0.9);
+            padding: 40px 0 20px;
+            margin-top: 60px;
+            border-top: 1px solid rgba(106, 17, 203, 0.3);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--light);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .social-icon:hover {
+            background: var(--gradient);
+            transform: translateY(-3px);
+        }
+        
+        .footer-links h4 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: var(--secondary);
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: #aab8c5;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .info-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <div class="logo">NPV</div>
+                    <div class="logo-text">
+                        <h1>NET PRESENT VALUE</h1>
+                        <span>TON Blockchain Token</span>
+                    </div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="active">Главная</a></li>
+                        <li><a href="#info">Информация</a></li>
+                        <li><a href="#vesting">Вестинг</a></li>
+                        <li><a href="#links">Торговля</a></li>
+                        <li><a href="#community">Сообщество</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>Токен Будущей Стоимости</h2>
+            <p>Это <span class="highlight">не просто очередной мемкоин</span>. Уникальная особенность нашего токена - его долгосрочный потенциал, рассчитанный на десятилетия.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Token Information -->
+        <section id="info" class="token-info">
+            <div class="info-card">
+                <h3>Основная информация</h3>
+                <div class="info-item">
+                    <span class="label">Название:</span>
+                    <span class="value">NET PRESENT VALUE</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Символ:</span>
+                    <span class="value">NPV</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Дробные части:</span>
+                    <span class="value">9</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Макс. предложение:</span>
+                    <span class="value">24,862,048 NPV</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Минтабельный:</span>
+                    <span class="value status-false">Нет (права отозваны)</span>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3>Адреса</h3>
+                <div class="info-item">
+                    <span class="label">Адрес контракта:</span>
+                    <span class="value">
+                        EQBzKIYP...fLdcEaT3
+                        <button class="copy-btn" title="Скопировать">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Владелец:</span>
+                    <span class="value">
+                        UQAAAAAA...AAAAAJKZ
+                        <button class="copy-btn" title="Скопировать">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Статус владельца:</span>
+                    <span class="value status-false">Права отозваны</span>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3>Дополнительно</h3>
+                <div class="info-item">
+                    <span class="label">Блокчейн:</span>
+                    <span class="value">TON (The Open Network)</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Стандарт:</span>
+                    <span class="value">Jetton</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Дата создания:</span>
+                    <span class="value">2024</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Статус:</span>
+                    <span class="value status-true">Активный</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Vesting Information -->
+        <section id="vesting" class="description">
+            <h3>Программа Вестинга</h3>
+            <div class="vesting-info">
+                <p><i class="fas fa-lock"></i> <strong>15,000,000 NPV (60.3%)</strong> заблокированы на 7 лет</p>
+            </div>
+            <p>
+                Чтобы обеспечить долгосрочную стабильность проекта и доверие инвесторов, значительная часть токенов NPV находится в программе вестинга. 
+                Это означает, что эти токены будут постепенно разблокироваться в течение 7 лет, предотвращая резкие колебания рынка.
+            </p>
+            <p>
+                Текущий статус заблокированных токенов можно проверить на Tonraffles:
+            </p>
+            <a href="https://tonraffles.app/lock/EQBzKIYP_WVnYS5kDbz-3zat98htNCXQUVfmkaH7fLdcEaT3" class="btn" target="_blank">
+                <i class="fas fa-external-link-alt"></i> Проверить вестинг
+            </a>
+        </section>
+        
+        <!-- Links Section -->
+        <section id="links" class="links-section">
+            <h2>Торговые площадки</h2>
+            <div class="links-grid">
+                <div class="link-card">
+                    <div class="link-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3>DEDUST</h3>
+                    <p>Децентрализованный обмен TON на NPV</p>
+                    <a href="https://dedust.io/swap/TON/EQBzKIYP_WVnYS5kDbz-3zat98htNCXQUVfmkaH7fLdcEaT3" class="btn" target="_blank">
+                        <i class="fas fa-exchange-alt"></i> Обменять
+                    </a>
+                </div>
+                
+                <div class="link-card">
+                    <div class="link-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Ston.fi</h3>
+                    <p>Торгуйте NPV на ведущей DEX TON</p>
+                    <a href="https://app.ston.fi/swap?ft=TON&tt=EQBzKIYP_WVnYS5kDbz-3zat98htNCXQUVfmkaH7fLdcEaT3&chartVisible=true&chartInterval=1w" class="btn" target="_blank">
+                        <i class="fas fa-chart-line"></i> Торговать
+                    </a>
+                </div>
+                
+                <div class="link-card">
+                    <div class="link-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h3>GeckoTerminal</h3>
+                    <p>Актуальная стоимость и графики</p>
+                    <a href="https://www.geckoterminal.com/ru/ton/pools/EQDZ2_nEr-B8GYZpEA1S5zyt4nbA1XM_K-1Yepc7Yjn3we7e" class="btn" target="_blank">
+                        <i class="fas fa-chart-bar"></i> График
+                    </a>
+                </div>
+                
+                <div class="link-card">
+                    <div class="link-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Tonviewer</h3>
+                    <p>Детали контракта и транзакции</p>
+                    <a href="https://tonviewer.com/EQBzKIYP_WVnYS5kDbz-3zat98htNCXQUVfmkaH7fLdcEaT3" class="btn" target="_blank">
+                        <i class="fas fa-info-circle"></i> Исследовать
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Community Section -->
+        <section id="community" class="links-section">
+            <h2>Присоединяйтесь к сообществу</h2>
+            <div class="links-grid">
+                <div class="link-card">
+                    <div class="link-icon">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                    <h3>Telegram</h3>
+                    <p>Официальный чат сообщества NPV</p>
+                    <a href="https://t.me/Netpresentvalue" class="btn" target="_blank">
+                        <i class="fab fa-telegram"></i> Присоединиться
+                    </a>
+                </div>
+                
+                <div class="link-card">
+                    <div class="link-icon">
+                        <i class="fab fa-vk"></i>
+                    </div>
+                    <h3>VKontakte</h3>
+                    <p>Группа проекта в социальной сети ВКонтакте</p>
+                    <a href="https://vk.com/netpresentvalue" class="btn" target="_blank">
+                        <i class="fab fa-vk"></i> Подписаться
+                    </a>
+                </div>
+                
+                <div class="link-card">
+                    <div class="link-icon">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                    <h3>Twitter (X)</h3>
+                    <p>Официальные новости и анонсы проекта</p>
+                    <a href="https://x.com/NPVproject" class="btn" target="_blank">
+                        <i class="fab fa-twitter"></i> Читать
+                    </a>
+                </div>
+                
+                <div class="link-card">
+                    <div class="link-icon">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <h3>Discord</h3>
+                    <p>Обсуждение проекта и техническая поддержка</p>
+                    <a href="https://discord.gg/WcuumfuUen" class="btn" target="_blank">
+                        <i class="fab fa-discord"></i> Подключиться
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="footer-logo">NET PRESENT VALUE</div>
+                    <p>Инновационный токен с долгосрочным потенциалом, созданный на блокчейне TON.</p>
+                    <div class="footer-social">
+                        <a href="https://t.me/Netpresentvalue" class="social-icon" target="_blank">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="https://vk.com/netpresentvalue" class="social-icon" target="_blank">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                        <a href="https://x.com/NPVproject" class="social-icon" target="_blank">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://discord.gg/WcuumfuUen" class="social-icon" target="_blank">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Ресурсы</h4>
+                    <ul>
+                        <li><a href="https://ton.org/" target="_blank">Официальный сайт TON</a></li>
+                        <li><a href="https://dedust.io/" target="_blank">DEDUST Exchange</a></li>
+                        <li><a href="https://ston.fi/" target="_blank">Ston.fi DEX</a></li>
+                        <li><a href="https://tonraffles.app/" target="_blank">Tonraffles (вестинг)</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Аналитика</h4>
+                    <ul>
+                        <li><a href="https://tonviewer.com/EQBzKIYP_WVnYS5kDbz-3zat98htNCXQUVfmkaH7fLdcEaT3" target="_blank">Tonviewer</a></li>
+                        <li><a href="https://www.geckoterminal.com/ru/ton/pools/EQDZ2_nEr-B8GYZpEA1S5zyt4nbA1XM_K-1Yepc7Yjn3we7e" target="_blank">GeckoTerminal</a></li>
+                        <li><a href="https://dyor.io/ru/token/EQBzKIYP_WVnYS5kDbz-3zat98htNCXQUVfmkaH7fLdcEaT3" target="_blank">DYOR Explorer</a></li>
+                        <li><a href="https://tonapi.io/" target="_blank">TON API</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2024 NET PRESENT VALUE (NPV). Все права защищены. Токен на блокчейне TON.</p>
+                <p>Это не инвестиционная рекомендация. Криптовалюты являются волатильными активами.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Copy button functionality
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const valueElement = this.previousElementSibling;
+                const text = valueElement.textContent;
+                
+                // Create a temporary textarea to copy text
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                
+                // Show feedback
+                const originalHTML = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-check"></i>';
+                this.style.background = '#28a745';
+                
+                // Revert after 1.5 seconds
+                setTimeout(() => {
+                    this.innerHTML = originalHTML;
+                    this.style.background = '';
+                }, 1500);
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
