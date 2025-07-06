@@ -36,7 +36,7 @@
 ## 📥 Как использовать
 1. Клонируйте репозиторий
 2. Откройте `index.html` в браузере
-3. Или посетите GitHub Pages: [https://yourusername.github.io/repository-name](https://yourusername.github.io/repository-name)
+3. Или посетите GitHub Pages: [NPV-Jetton](https://rucryptowhale.github.io/NPV-Jetton/)
 
 ## 🌐 Сообщество
 - [Telegram](https://t.me/Netpresentvalue)
